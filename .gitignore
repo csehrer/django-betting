@@ -1,0 +1,17 @@
+
+#env files
+venv/
+
+#vs code env files
+.vscode/
+
+#log files
+*.log
+
+#cache files
+*.pyc
+
+#csv files
+*.csv
+
+betting/

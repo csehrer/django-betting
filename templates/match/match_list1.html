@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% block  content %}
+<script> 
+    function onBtnUpdate(){
+        console.log('Update Button called');
+        $.ajax({
+            url : "update_atp_match/", // the endpoint
+            type : "GET", // http method
+            success : function(json) {
+                console.log("success"); // another sanity check
+                alert('success');
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {                
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                alert('failed');
+            }
+        });
+    }
+
+    function onBtnDelete() {
+        if(confirm('Are you sure to delete all data?')){
+            $.ajax({
+                url : "remove_atp_match/", // the endpoint
+                type : "GET", // http method
+                success : function(json) {
+                    console.log("success"); // another sanity check
+                    alert('success');
+                },
+
+                // handle a non-successful response
+                error : function(xhr,errmsg,err) {                
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    alert('failed');
+                }
+            });
+        }
+    }
+
+    function onBtnUpdatePerform() {
+        $.ajax({
+            url : "update_atp_perform/", 
+            type : "GET", 
+            success : function(json) {
+                console.log("success"); // another sanity check
+                alert('success');
+            },
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {                
+                console.log(xhr.status + ": " + xhr.responseText); 
+                alert('failed');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+         $('.table-row').click(function() {
+            console.log($(this).attr('data-id'));
+            /* $('#dialog').dialog({
+                autoOpen : false,
+                show : {
+                    effect : "blind",
+                    duration : 1000
+                },
+                hide : {
+                    effect : 'explode',
+                    duration: 1000,
+                }
+            }); /**/
+            console.log($(this).attr('data-waces'));
+            $('#home').text($(this).attr('data-home'));
+            $('#home_dfault').text($(this).attr('data-homedoublefault'));
+            $('#home_aces').text($(this).attr('data-home_aces'));
+            $('#home_ser1').text($(this).attr('data-home_ser1') + '%');
+            $('#home_ser2').text($(this).attr('data-home_ser2') + '%');
+            $('#home_ser').text($(this).attr('data-home_ser')+ '%');
+            $('#home_rec').text($(this).attr('data-home_rec')+ '%');
+            $('#home_total').text($(this).attr('data-home_total')+ '%');
+            
+            $('#away').text($(this).attr('data-away'));
+            $('#home_dfault').text($(this).attr('data-away_doublefault'));
+            $('#home_aces').text($(this).attr('data-away_aces'));
+            $('#home_ser1').text($(this).attr('data-away_ser1')+ '%');
+            $('#home_ser2').text($(this).attr('data-away_ser2')+ '%');
+            $('#home_ser').text($(this).attr('data-away_ser')+ '%');
+            $('#home_rec').text($(this).attr('data-away_rec')+ '%');
+            $('#home_total').text($(this).attr('data-away_total')+ '%');
+            $("#detailModal").modal();
+        });
+        
+    })
+    
+</script>
+<!-- Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body container" style="display:inline-block;">
+        <table class="container">
+            <thead> 
+                <th>Cateogories</th>
+                <th>Home player</th>
+                <th>Away player</th>
+            </thead>
+            <tbody>
+                <tr><td> Name </td> <td id="home"> </td> <td id="away"> </td> </tr>
+                <tr><td> Double Fault </td> <td id="home_doublefault"> </td> <td id="away_doublefault"> </td> </tr>
+                <tr><td> Aces </td> <td id="home_aces"> </td> <td id="away_aces"> </td> </tr>
+                <tr><td> 1st Serve won </td> <td id="home_ser1"> </td> <td id="away_ser1"> </td> </tr>
+                <tr><td> 2nd Serve won </td> <td id="home_ser2"> </td> <td id="away_ser2"> </td> </tr>
+                <tr><td> Total Serve won </td> <td id="home_total"> </td> <td id="away_total"> </td> </tr>
+                <tr><td> Receive won </td> <td id="home_rec"> </td> <td id="away_rec"> </td> </tr>
+                <tr><td> Total  </td> <td id="home_total"> </td> <td id="away_total"> </td> </tr>
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h1> Matches list </h1>
+<button class="btn btn-success" onclick = "onBtnUpdate()"> Update Match </button>
+<button class="btn btn-danger" onclick = "onBtnDelete()"> Delete </button>
+<button class="btn btn-primary" onclick = "onBtnUpdatePerform()"> Update Performance </button>
+<table class="table table-striped table-sm table-border table-hover table-responsive">
+<thead>
+    <th> No </th>
+    <th> Date </th>
+    <th> Round </th>
+    <th> Tournament Name </th>
+    <th> Location </th>
+    <th> Status </th>
+    <th> Winner </th>
+    <th> Loser </th>
+    <th> Wsets </th>
+    <th> Lsets </th>
+    <th> Total sets </th>
+    <th> Total games </th>
+    <th> Bestof </th>
+    <th> Comment </th>
+    <th> Home </th>
+    <th> Away </th>
+
+</thead>
+<tbody >
+    {% for match in matches %}
+        {% if match.status == 'fin' %}
+        <tr class = 'table-success table-row' 
+            data-id = "{{ forloop.counter }}"
+            data-home = "{{ match.home }}"
+            data-home_doublefault = "{{ match.home_doublefault }}"
+            data-home_aces = "{{ match.home_aces}}"
+            data-home_ser1 = "{{ match.home_ser1}}"
+            data-home_ser2 = "{{ match.home_ser2}}"
+            data-home_ser = "{{ match.home_ser}}"
+            data-home_rec = "{{ match.home_rec}}"
+            data-home_total = "{{ match.home_total}}"
+        
+            data-away = "{{ match.loser}}"
+            data-away_doublefault = "{{ match.away_doublefault }}"
+            data-away_aces = "{{ match.away_aces}}"
+            data-away_ser1 = "{{ match.away_ser1}}"
+            data-away_ser2 = "{{ match.away_ser2}}"
+            data-away_ser = "{{ match.away_ser}}"
+            data-away_rec = "{{ match.away_rec}}"
+            data-away_total = "{{ match.away_total}}"
+        >
+            <td> {{ forloop.counter }} </td> 
+            <td > {{ match.date | date:'m-d ' }} </td>
+            <td> {{ match.round }} </td>
+            <td> {{ match.tournament}} </td>
+            <td> {{ match.location }} </td>
+            <td> {{ match.status }} </td>
+            <td style="color:red;"> {{ match.winner }} </td>
+            <td style="color:grey;"> {{ match.loser }} </td>
+            
+            <td> <h3> {{ match.away_winsets }} </h3> </td>
+
+            <td> {{ match.totalsets }} </td>
+            <td> {{ match.totalgames }} </td>
+            <td> {{ match.bestof }} </td>
+            <td> {{ match.comment }} </td>
+            {% if match.home == match.winner %}
+                <td style="color:red;"> {{ match.home }} </td>
+                <td style="color:grey;"> {{ match.away }} </td>
+            {% else %}
+                <td style="color:grey;"> {{ match.home }} </td>
+                <td style="color:red;"> {{ match.away }} </td>
+            {% endif %}
+         
+        </tr>
+        
+        {% elif match.status == 'sched' %}
+        <tr class = 'table-warning'>
+            <td> {{ forloop.counter }} </td> 
+            <td > {{ match.date | date:'m-d ' }} </td>
+            <td> {{ match.round }} </td>
+            <td> {{ match.tournament}} </td>
+            <td> {{ match.location }} </td>
+            <td> {{ match.status }} </td>
+            <td style="color:red;"> {{ match.winner }} </td>
+            <td style="color:grey;"> {{ match.loser }} </td>
+            <td> <h3> {{ match.home_sets }} </h3> </td>
+            <td> <h3> {{ match.away_sets }} </h3> </td>
+            
+            <td> {{ match.totalsets }} </td>
+            <td> {{ match.totalgames }} </td>
+            <td> {{ match.bestof }} </td>
+            <td> {{ match.comment }} </td>
+            {% if match.home == match.winner %}
+                <td style="color:red;"> {{ match.home }} </td>
+                <td style="color:grey;"> {{ match.away }} </td>
+            {% else %}
+                <td style="color:grey;"> {{ match.home }} </td>
+                <td style="color:red;"> {{ match.away }} </td>
+            {% endif %}
+           
+        </tr>
+
+        {% elif match.status == 'live' %}
+        <tr class='table-danger'>
+            <td> {{ forloop.counter }} </td> 
+            <td > {{ match.date | date:'m-d ' }} </td>
+            <td> {{ match.round }} </td>
+            <td> {{ match.tournament}} </td>
+            <td> {{ match.location }} </td>
+            <td> {{ match.status }} </td>
+            <td style="color:red;"> {{ match.winner }} </td>
+            <td style="color:grey;"> {{ match.loser }} </td>
+            <td> <h3> {{ match.home_sets }} </h3> </td>
+            <td> <h3> {{ match.away_sets }} </h3> </td>
+            <td> {{ match.totalsets }} </td>
+            <td> {{ match.totalgames }} </td>
+            <td> {{ match.bestof }} </td>
+            <td> {{ match.comment }} </td>
+            {% if match.home == match.winner %}
+                <td style="color:red;"> {{ match.home }} </td>
+                <td style="color:grey;"> {{ match.away }} </td>
+            {% else %}
+                <td style="color:grey;"> {{ match.home }} </td>
+                <td style="color:red;"> {{ match.away }} </td>
+            {% endif %}
+        </tr>
+        {% endif %}
+    {% endfor %}
+</tbody>
+</table>
+
+
+{% endblock  %}
